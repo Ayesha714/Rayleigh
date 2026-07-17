@@ -23,101 +23,120 @@
     ! NOTE:  ADVECTION TERMS ARE SCALED BY DENSITY (so that they represent a force density)
 
     Integer, Parameter :: curl_mom_eq_off = mom_eq_off+100 ! :OFFSET CODE:
-    Integer, Parameter :: v_grad_v_r       = curl_mom_eq_off+1 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v}\cdot\boldsymbol{\nabla}\boldsymbol{v}\right]_r$
-    Integer, Parameter :: v_grad_v_theta   = curl_mom_eq_off+2 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v}\cdot\boldsymbol{\nabla}\boldsymbol{v}\right]_\theta$
-    Integer, Parameter :: v_grad_v_phi     = curl_mom_eq_off+3 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v}\cdot\boldsymbol{\nabla}\boldsymbol{v}\right]_\phi$
+    Integer, Parameter :: curl_v_grad_v_r       = curl_mom_eq_off+1 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v}\cdot\boldsymbol{\nabla}\boldsymbol{v}\right]_r$
+    Integer, Parameter :: curl_v_grad_v_theta   = curl_mom_eq_off+2 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v}\cdot\boldsymbol{\nabla}\boldsymbol{v}\right]_\theta$
+    Integer, Parameter :: curl_v_grad_v_phi     = curl_mom_eq_off+3 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v}\cdot\boldsymbol{\nabla}\boldsymbol{v}\right]_\phi$
 
-    Integer, Parameter :: vp_grad_vm_r     = curl_mom_eq_off+4 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_r$
-    Integer, Parameter :: vp_grad_vm_theta = curl_mom_eq_off+5 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_\theta$
-    Integer, Parameter :: vp_grad_vm_phi   = curl_mom_eq_off+6 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_\phi$
+    Integer, Parameter :: curl_v_grad_v_r_squared       = curl_mom_eq_off+4 ! :tex: $\left(\mathrm{f}_1\left[\boldsymbol{v}\cdot\boldsymbol{\nabla}\boldsymbol{v}\right]_r\right)^2$
+    Integer, Parameter :: curl_v_grad_v_theta_squared   = curl_mom_eq_off+5 ! :tex: $\left(\mathrm{f}_1\left[\boldsymbol{v}\cdot\boldsymbol{\nabla}\boldsymbol{v}\right]_\theta\right)^2$
+    Integer, Parameter :: curl_v_grad_v_phi_squared     = curl_mom_eq_off+6 ! :tex: $\left(\mathrm{f}_1\left[\boldsymbol{v}\cdot\boldsymbol{\nabla}\boldsymbol{v}\right]_\phi\right)^2$
 
-    Integer, Parameter :: vm_grad_vp_r     = curl_mom_eq_off+7 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_r$
-    Integer, Parameter :: vm_grad_vp_theta = curl_mom_eq_off+8 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_\theta$
-    Integer, Parameter :: vm_grad_vp_phi   = curl_mom_eq_off+9 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_\phi$
+!    Integer, Parameter :: curl_vp_grad_vm_r     = curl_mom_eq_off+7 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_r$
+!    Integer, Parameter :: curl_vp_grad_vm_theta = curl_mom_eq_off+8 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_\theta$
+!    Integer, Parameter :: curl_vp_grad_vm_phi   = curl_mom_eq_off+9 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_\phi$
 
-    Integer, Parameter :: vp_grad_vp_r     = curl_mom_eq_off+10 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_r$
-    Integer, Parameter :: vp_grad_vp_theta = curl_mom_eq_off+11 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_\theta$
-    Integer, Parameter :: vp_grad_vp_phi   = curl_mom_eq_off+12 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_\phi$
+!    Integer, Parameter :: curl_vm_grad_vp_r     = curl_mom_eq_off+10 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_r$
+!    Integer, Parameter :: curl_vm_grad_vp_theta = curl_mom_eq_off+11 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_\theta$
+!    Integer, Parameter :: curl_vm_grad_vp_phi   = curl_mom_eq_off+12 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_\phi$
 
-    Integer, Parameter :: vm_grad_vm_r     = curl_mom_eq_off+13 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_r$
-    Integer, Parameter :: vm_grad_vm_theta = curl_mom_eq_off+14 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_\theta$
-    Integer, Parameter :: vm_grad_vm_phi   = curl_mom_eq_off+15 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_\phi$
+!    Integer, Parameter :: curl_vp_grad_vp_r     = curl_mom_eq_off+13 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_r$
+!    Integer, Parameter :: curl_vp_grad_vp_theta = curl_mom_eq_off+14 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_\theta$
+!    Integer, Parameter :: curl_vp_grad_vp_phi   = curl_mom_eq_off+15 ! :tex: $\mathrm{f}_1\left[\boldsymbol{v'}\cdot\boldsymbol{\nabla}\boldsymbol{v'}\right]_\phi$
+
+!    Integer, Parameter :: curl_vm_grad_vm_r     = curl_mom_eq_off+16 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_r$
+!    Integer, Parameter :: curl_vm_grad_vm_theta = curl_mom_eq_off+17 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_\theta$
+!    Integer, Parameter :: curl_vm_grad_vm_phi   = curl_mom_eq_off+18 ! :tex: $\mathrm{f}_1\left[\overline{\boldsymbol{v}}\cdot\boldsymbol{\nabla}\overline{\boldsymbol{v}}\right]_\phi$
 
     !/////////////////////////////////////////////////////////////
-    !  Linear Forces
+    !  Linear forces
     !  Note:  the pressure gradient diagnostic codes are  above
 
-    Integer, Parameter :: buoyancy_force  =  curl_mom_eq_off+16  ! :tex: $c_2\mathrm{f}_2\Theta$
-    Integer, Parameter :: buoyancy_pforce =  curl_mom_eq_off+17  ! :tex: $c_2\mathrm{f}_2\Theta'$
-    Integer, Parameter :: buoyancy_mforce =  curl_mom_eq_off+18  ! :tex: $c_2\mathrm{f}_2\overline{\Theta}$
+    Integer, Parameter :: curl_buoyancy_force_theta  =  curl_mom_eq_off+19  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_2\mathrm{f}_2\Theta\right)\right]_\theta$
+    Integer, Parameter :: curl_buoyancy_force_phi  =  curl_mom_eq_off+20  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_2\mathrm{f}_2\Theta\right)\right]_\phi$
 
-    Integer, Parameter :: Coriolis_Force_r      = curl_mom_eq_off+19 ! :tex: $-c_1\mathrm{f}_1\left[\boldsymbol{\hat{z}}\times\boldsymbol{v}\right]_r$
-    Integer, Parameter :: Coriolis_Force_theta  = curl_mom_eq_off+20 ! :tex: $-c_1\mathrm{f}_1\left[\boldsymbol{\hat{z}}\times\boldsymbol{v}\right]_\theta$
-    Integer, Parameter :: Coriolis_Force_phi    = curl_mom_eq_off+21 ! :tex: $-c_1\mathrm{f}_1\left[\boldsymbol{\hat{z}}\times\boldsymbol{v}\right]_\phi$
+    Integer, Parameter :: curl_buoyancy_force_theta_squared  =  curl_mom_eq_off+21  ! :tex: $\left(\left[\boldsymbol{\nabla}\times\left(c_2\mathrm{f}_2\Theta\right)\right]_\theta\right)^2$
+    Integer, Parameter :: curl_buoyancy_force_phi_squared  =  curl_mom_eq_off+22  ! :tex: $\left(\left[\boldsymbol{\nabla}\times\left(c_2\mathrm{f}_2\Theta\right)\right]_\phi\right)^2$
 
-    Integer, Parameter :: Coriolis_pForce_r     = curl_mom_eq_off+22 ! :tex: $-c_1\mathrm{f}_1\left[\boldsymbol{\hat{z}}\times\boldsymbol{v'}\right]_r$
-    Integer, Parameter :: Coriolis_pForce_theta = curl_mom_eq_off+23 ! :tex: $-c_1\mathrm{f}_1\left[\boldsymbol{\hat{z}}\times\boldsymbol{v'}\right]_\theta$
-    Integer, Parameter :: Coriolis_pForce_phi   = curl_mom_eq_off+24 ! :tex: $-c_1\mathrm{f}_1\left[\boldsymbol{\hat{z}}\times\boldsymbol{v'}\right]_\phi$
+!    Integer, Parameter :: curl_buoyancy_pforce_theta  =  curl_mom_eq_off+23  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_2\mathrm{f}_2\overline{\Theta}\right)\right]_\theta$
+!    Integer, Parameter :: curl_buoyancy_pforce_phi  =  curl_mom_eq_off+24  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_2\mathrm{f}_2\overline{\Theta}\right)\right]_\phi$
 
-    Integer, Parameter :: Coriolis_mForce_r     = curl_mom_eq_off+25 ! :tex: $-c_1\mathrm{f}_1\left[\boldsymbol{\hat{z}}\times\overline{\boldsymbol{v}}\right]_r$
-    Integer, Parameter :: Coriolis_mForce_theta = curl_mom_eq_off+26 ! :tex: $-c_1\mathrm{f}_1\left[\boldsymbol{\hat{z}}\times\overline{\boldsymbol{v}}\right]_\theta$
-    Integer, Parameter :: Coriolis_mForce_phi   = curl_mom_eq_off+27 ! :tex: $-c_1\mathrm{f}_1\left[\boldsymbol{\hat{z}}\times\overline{\boldsymbol{v}}\right]_\phi$
+!    Integer, Parameter :: curl_buoyancy_mforce_theta  =  curl_mom_eq_off+25  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_2\mathrm{f}_2\Theta'\right)\right]_\theta$
+!    Integer, Parameter :: curl_buoyancy_mforce_phi  =  curl_mom_eq_off+26  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_2\mathrm{f}_2\Theta'\right)\right]_\phi$
+
+
+    Integer, Parameter :: curl_coriolis_force_r      = curl_mom_eq_off+27 ! :tex: $\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\boldsymbol{v})\right)\right]_r$
+    Integer, Parameter :: curl_coriolis_force_theta  = curl_mom_eq_off+28 ! :tex: $\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\boldsymbol{v})\right)\right]_\theta$
+    Integer, Parameter :: curl_coriolis_force_phi    = curl_mom_eq_off+29 ! :tex: $\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\boldsymbol{v})\right)\right]_\phi$
+
+    Integer, Parameter :: curl_coriolis_force_r_squared      = curl_mom_eq_off+30 ! :tex: $\left(\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\boldsymbol{v})\right)\right]_r\right)^2$
+    Integer, Parameter :: curl_coriolis_force_theta_squared  = curl_mom_eq_off+31 ! :tex: $\left(\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\boldsymbol{v})\right)\right]_\theta\right)^2$
+    Integer, Parameter :: curl_coriolis_force_phi_squared    = curl_mom_eq_off+32 ! :tex: $\left(\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\boldsymbol{v})\right)\right]_\phi\right)^2$
+
+!    Integer, Parameter :: curl_coriolis_pforce_r     = curl_mom_eq_off+33 ! :tex: $\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\boldsymbol{v}')\right)\right]_r$
+!    Integer, Parameter :: curl_coriolis_pforce_theta = curl_mom_eq_off+34 ! :tex: $\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\boldsymbol{v}')\right)\right]_\theta$
+!    Integer, Parameter :: curl_coriolis_pforce_phi   = curl_mom_eq_off+35 ! :tex: $\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\boldsymbol{v}')\right)\right]_\phi$
+
+!    Integer, Parameter :: curl_coriolis_mforce_r     = curl_mom_eq_off+36 ! :tex: $\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\overline{\boldsymbol{\hat{v}}})\right)\right]_r$
+!    Integer, Parameter :: curl_coriolis_mforce_theta = curl_mom_eq_off+37 ! :tex: $\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\overline{\boldsymbol{\hat{v}}})\right)\right]_\theta$
+!    Integer, Parameter :: curl_coriolis_mforce_phi   = curl_mom_eq_off+38 ! :tex: $\left[\boldsymbol{\nabla}\times\left(-c_1\mathrm{f}_1(\hat{\boldsymbol{z}}\times\overline{\boldsymbol{\hat{v}}})\right)\right]_\phi$
 
     ! Viscous forces
-    Integer, Parameter :: viscous_Force_r       = curl_mom_eq_off+28 ! :tex: $c_5\left[\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal{D}}\right]_r$
-    Integer, Parameter :: viscous_Force_theta   = curl_mom_eq_off+29 ! :tex: $c_5\left[\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal{D}}\right]_\theta$
-    Integer, Parameter :: viscous_Force_phi     = curl_mom_eq_off+30 ! :tex: $c_5\left[\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal{D}}\right]_\phi$
+    Integer, Parameter :: curl_viscous_force_r       = curl_mom_eq_off+39 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D})\right)\right]_r$
+    Integer, Parameter :: curl_viscous_force_theta   = curl_mom_eq_off+40 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D})\right)\right]_\theta$
+    Integer, Parameter :: curl_viscous_force_phi     = curl_mom_eq_off+41 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D})\right)\right]_\phi$
 
-    Integer, Parameter :: viscous_pForce_r      = curl_mom_eq_off+31 ! :tex: $c_5\left[\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal{D'}}\right]_r$
-    Integer, Parameter :: viscous_pForce_theta  = curl_mom_eq_off+32 ! :tex: $c_5\left[\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal{D'}}\right]_\theta$
-    Integer, Parameter :: viscous_pForce_phi    = curl_mom_eq_off+33 ! :tex: $c_5\left[\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal{D'}}\right]_\phi$
+!    Integer, Parameter :: curl_viscous_pforce_r      = curl_mom_eq_off+42 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D'})\right)\right]_r$
+!    Integer, Parameter :: curl_viscous_pforce_theta  = curl_mom_eq_off+43 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D'})\right)\right]_\theta$
+!    Integer, Parameter :: curl_viscous_pforce_phi    = curl_mom_eq_off+44 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D'})\right)\right]_\phi$
 
-    Integer, Parameter :: viscous_mForce_r      = curl_mom_eq_off+34 ! :tex: $c_5\left[\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal{D}}}\right]_r$
-    Integer, Parameter :: viscous_mForce_theta  = curl_mom_eq_off+35 ! :tex: $c_5\left[\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal{D}}}\right]_\theta$
-    Integer, Parameter :: viscous_mForce_phi    = curl_mom_eq_off+36 ! :tex: $c_5\left[\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal{D}}}\right]_\phi$
+!    Integer, Parameter :: curl_viscous_mforce_r      = curl_mom_eq_off+45 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal D}})\right)\right]_r$
+!    Integer, Parameter :: curl_viscous_mforce_theta  = curl_mom_eq_off+46 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal D}})\right)\right]_\theta$
+!    Integer, Parameter :: curl_viscous_mforce_phi    = curl_mom_eq_off+47 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal D}})\right)\right]_\phi$
 
     ! Pressure forces
-    Integer, Parameter :: pressure_Force_r       = curl_mom_eq_off+37 ! :tex: $ -c_3\mathrm{f}_1\frac{\partial}{\partial r}\left(\frac{P}{\mathrm{f}_1} \right)$
-    Integer, Parameter :: pressure_Force_theta   = curl_mom_eq_off+38 ! :tex: $ -c_3\frac{1}{r}\frac{\partial P}{\partial \theta}$
-    Integer, Parameter :: pressure_Force_phi     = curl_mom_eq_off+39 ! :tex: $ -c_3\frac{1}{r\mathrm{sin}\theta}\frac{\partial P}{\partial \phi}$
+    Integer, Parameter :: curl_pressure_force_r       = curl_mom_eq_off+48 ! :tex: 
+    Integer, Parameter :: curl_pressure_force_theta   = curl_mom_eq_off+49 ! :tex: 
+    Integer, Parameter :: curl_pressure_force_phi     = curl_mom_eq_off+50 ! :tex: 
 
-    Integer, Parameter :: pressure_pForce_r      = curl_mom_eq_off+40 ! :tex: $ -c_3\mathrm{f}_1\frac{\partial}{\partial r}\left(\frac{P'}{\mathrm{f}_1} \right)$
-    Integer, Parameter :: pressure_pForce_theta  = curl_mom_eq_off+41 ! :tex: $ -c_3\frac{1}{r}\frac{\partial P'}{\partial \theta}$
-    Integer, Parameter :: pressure_pForce_phi    = curl_mom_eq_off+42 ! :tex: $ -c_3\frac{1}{r\mathrm{sin}\theta}\frac{\partial P'}{\partial \phi}$
+    Integer, Parameter :: curl_pressure_force_r_squared       = curl_mom_eq_off+51 ! :tex: 
+    Integer, Parameter :: curl_pressure_force_theta_squared   = curl_mom_eq_off+52 ! :tex: 
+    Integer, Parameter :: curl_pressure_force_phi_squared     = curl_mom_eq_off+53 ! :tex: 
 
-    Integer, Parameter :: pressure_mForce_r      = curl_mom_eq_off+43 ! :tex: $ -c_3\mathrm{f}_1\frac{\partial}{\partial r}\left(\frac{\overline{P}}{\mathrm{f}_1} \right)$
-    Integer, Parameter :: pressure_mForce_theta  = curl_mom_eq_off+44 ! :tex: $ -c_3\frac{1}{r}\frac{\partial \overline{P}}{\partial \theta}$
-    Integer, Parameter :: pressure_mForce_phi    = curl_mom_eq_off+45 ! :tex: $ -c_3\frac{1}{r\mathrm{sin}\theta}\frac{\partial \overline{P}}{\partial \phi}$
+!    Integer, Parameter :: curl_pressure_pforce_r      = curl_mom_eq_off+54 ! :tex:
+!    Integer, Parameter :: curl_pressure_pforce_theta  = curl_mom_eq_off+55 ! :tex: 
+!    Integer, Parameter :: curl_pressure_pforce_phi    = curl_mom_eq_off+56 ! :tex:
 
-    ! ell=0 pressure and buoyancy forces (r-direction only)
-    ! These are substracted out from the radial terms above
-    ! because they do not contribute to the dynamics.
-    ! The ell=0 buoyancy force is determined by the mean entropy profile.
-    ! The ell=0 pressure force is DEFINED such that it exactly balances the ell=0 buoyancy
-    Integer, Parameter :: buoyancy_force_ell0 = curl_mom_eq_off+46    ! :tex: $c_2\mathrm{f}_2\Theta_{00}$
-    Integer, Parameter :: pressure_force_ell0_r = curl_mom_eq_off+47  ! :tex: $-c_3\mathrm{f}_1\frac{\partial}{\partial r}\left(\frac{P_{00}}{\mathrm{f}_1} \right)$
+!    Integer, Parameter :: curl_pressure_mforce_r      = curl_mom_eq_off+57 ! :tex: 
+!    Integer, Parameter :: curl_pressure_mforce_theta  = curl_mom_eq_off+58 ! :tex: 
+!    Integer, Parameter :: curl_pressure_mforce_phi    = curl_mom_eq_off+59 ! :tex: 
 
-    !/////////////////////////// Lorentz Forces ///////////////////////////////
-    !  ref%Lorentz_Coeff * (del x B) x B
+
+    !/////////////////////////// Lorentz forces ///////////////////////////////
+    !  ref%Lorentz_Coeff * del  (del x B) x B
     !  ref%Lorentz_Coeff = 1/4pi when dimensional, Pr/(Pr_m E) when nondimesional
     !  j (below) is shorthand for ref%Lorentz_Coeff*delxB  (not quite the current density)
 
-    Integer, Parameter :: j_cross_b_r       = curl_mom_eq_off+48  ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\boldsymbol{B}\right)\times\boldsymbol{B}\right]_r$
-    Integer, Parameter :: j_cross_b_theta   = curl_mom_eq_off+49  ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\boldsymbol{B}\right)\times\boldsymbol{B}\right]_\theta$
-    Integer, Parameter :: j_cross_b_phi     = curl_mom_eq_off+50  ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\boldsymbol{B}\right)\times\boldsymbol{B}\right]_\phi$
+    Integer, Parameter :: curl_j_cross_b_r     = curl_mom_eq_off+60  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B)\times\boldsymbol B\right)\right)\right]_r$
+    Integer, Parameter :: curl_j_cross_b_theta = curl_mom_eq_off+61  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B)\times\boldsymbol B\right)\right)\right]_\theta$
+    Integer, Parameter :: curl_j_cross_b_phi   = curl_mom_eq_off+62  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B)\times\boldsymbol B\right)\right)\right]_\phi$
 
-    Integer, Parameter :: jp_cross_bm_r     = curl_mom_eq_off+51  ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\boldsymbol{B'}\right)\times\overline{\boldsymbol{B}}\right]_r$
-    Integer, Parameter :: jp_cross_bm_theta = curl_mom_eq_off+52  ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\boldsymbol{B'}\right)\times\overline{\boldsymbol{B}}\right]_\theta$
-    Integer, Parameter :: jp_cross_bm_phi   = curl_mom_eq_off+53  ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\boldsymbol{B'}\right)\times\overline{\boldsymbol{B}}\right]_\phi$
+    Integer, Parameter :: curl_j_cross_b_r_squared     = curl_mom_eq_off+63  ! :tex: $\left(\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B)\times\boldsymbol B\right)\right)\right]_r\right)^2$
+    Integer, Parameter :: curl_j_cross_b_theta_squared = curl_mom_eq_off+64  ! :tex: $\left(\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B)\times\boldsymbol B\right)\right)\right]_\theta\right)^2$
+    Integer, Parameter :: curl_j_cross_b_phi_squared   = curl_mom_eq_off+65  ! :tex: $\left(\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B)\times\boldsymbol B\right)\right)\right]_\phi\right)^2$
 
-    Integer, Parameter :: jm_cross_bp_r     = curl_mom_eq_off+54  ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\overline{\boldsymbol{B}}\right)\times\boldsymbol{B'}\right]_r$
-    Integer, Parameter :: jm_cross_bp_theta = curl_mom_eq_off+55  ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\overline{\boldsymbol{B}}\right)\times\boldsymbol{B'}\right]_\theta$
-    Integer, Parameter :: jm_cross_bp_phi   = curl_mom_eq_off+56  ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\overline{\boldsymbol{B}}\right)\times\boldsymbol{B'}\right]_\phi$
 
-    Integer, Parameter :: jm_cross_bm_r     = curl_mom_eq_off+57 ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\overline{\boldsymbol{B}}\right)\times\overline{\boldsymbol{B}}\right]_r$
-    Integer, Parameter :: jm_cross_bm_theta = curl_mom_eq_off+58 ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\overline{\boldsymbol{B}}\right)\times\overline{\boldsymbol{B}}\right]_\theta$
-    Integer, Parameter :: jm_cross_bm_phi   = curl_mom_eq_off+59 ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\overline{\boldsymbol{B}}\right)\times\overline{\boldsymbol{B}}\right]_\phi$
+!    Integer, Parameter :: curl_jp_cross_bm_r       = curl_mom_eq_off+66  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B')\times\overline{\boldsymbol B}\right)\right)\right]_r$
+!    Integer, Parameter :: curl_jp_cross_bm_theta   = curl_mom_eq_off+67  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B')\times\overline{\boldsymbol B}\right)\right)\right]_\theta$
+!    Integer, Parameter :: curl_jp_cross_bm_phi     = curl_mom_eq_off+68  ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B')\times\overline{\boldsymbol B}\right)\right)\right]_\phi$
 
-    Integer, Parameter :: jp_cross_bp_r     = curl_mom_eq_off+60 ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\boldsymbol{B'}\right)\times\boldsymbol{B'}\right]_r$
-    Integer, Parameter :: jp_cross_bp_theta = curl_mom_eq_off+61 ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\boldsymbol{B'}\right)\times\boldsymbol{B'}\right]_\theta$
-    Integer, Parameter :: jp_cross_bp_phi   = curl_mom_eq_off+62 ! :tex: $c_4\left[\left(\boldsymbol{\nabla}\times\boldsymbol{B'}\right)\times\boldsymbol{B'}\right]_\phi$
+!    Integer, Parameter :: curl_jm_cross_bp_r     = curl_mom_eq_off+69  ! :tex: $\left[\boldsymbol{\nabla}\times c_4\left((\boldsymbol{\nabla}\times\overline{\boldsymbol B})\times\boldsymbol B'\right)\right]_r$
+!    Integer, Parameter :: curl_jm_cross_bp_theta = curl_mom_eq_off+70  ! :tex: $\left[\boldsymbol{\nabla}\times c_4\left((\boldsymbol{\nabla}\times\overline{\boldsymbol B})\times\boldsymbol B'\right)\right]_\theta$
+!    Integer, Parameter :: curl_jm_cross_bp_phi   = curl_mom_eq_off+71  ! :tex: $\left[\boldsymbol{\nabla}\times c_4\left((\boldsymbol{\nabla}\times\overline{\boldsymbol B})\times\boldsymbol B'\right)\right]_\phi$
+
+!    Integer, Parameter :: curl_jm_cross_bm_r     = curl_mom_eq_off+72 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B')\times\boldsymbol B'\right)\right)\right]_r$
+!    Integer, Parameter :: curl_jm_cross_bm_theta = curl_mom_eq_off+73 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B')\times\boldsymbol B'\right)\right)\right]_\theta$
+!    Integer, Parameter :: curl_jm_cross_bm_phi   = curl_mom_eq_off+74 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\boldsymbol B')\times\boldsymbol B'\right)\right)\right]_\phi$
+
+!    Integer, Parameter :: curl_jp_cross_bp_r     = curl_mom_eq_off+74 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\overline{\boldsymbol B})\times\overline{\boldsymbol B}\right)\right)\right]_r$
+!    Integer, Parameter :: curl_jp_cross_bp_theta = curl_mom_eq_off+75 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\overline{\boldsymbol B})\times\overline{\boldsymbol B}\right)\right)\right]_\theta$
+!    Integer, Parameter :: curl_jp_cross_bp_phi   = curl_mom_eq_off+76 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_4\left((\boldsymbol{\nabla}\times\overline{\boldsymbol B})\times\overline{\boldsymbol B}\right)\right)\right]_\phi$
