@@ -1,21 +1,48 @@
-Module Diagnostics_Custom
+!
+!  Copyright (C) 2018 by the authors of the RAYLEIGH code.
+!
+!  This file is part of RAYLEIGH.
+!
+!  RAYLEIGH is free software; you can redistribute it and/or modify
+!  it under the terms of the GNU General Public License as published by
+!  the Free Software Foundation; either version 3, or (at your option)
+!  any later version.
+!
+!  RAYLEIGH is distributed in the hope that it will be useful,
+!  but WITHOUT ANY WARRANTY; without even the implied warranty of
+!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+!  GNU General Public License for more details.
+!
+!  You should have received a copy of the GNU General Public License
+!  along with RAYLEIGH; see the file LICENSE.  If not see
+!  <http://www.gnu.org/licenses/>.
+!
+
+Module Diagnostics_Curl_Momentum
     Use Diagnostics_Base
     Implicit None
+
 Contains
 
-    Subroutine Custom_MHD_Diagnostics(buffer)
+    Subroutine Compute_Curl_Momentum_Forces(buffer)
+        Real*8, Intent(InOut) :: buffer(1:,my_r%min:,my_theta%min:,1:)
+        Call Compute_Curl_Advection_Force(buffer)
+        Call Compute_Curl_Buoyancy_Force(buffer)
+        Call Compute_Curl_Magnetic_Force(buffer)
+        Call Compute_Curl_Coriolis_Force(buffer)
+        Call Compute_Curl_Pressure_Force(buffer)
+    End Subroutine
+
+    Subroutine Compute_Curl_Advection_Force(buffer)
         Implicit None
         Real*8, Intent(InOut) :: buffer(1:,my_r%min:,my_theta%min:,1:)
+        Integer :: r, k, t
+
         Real*8  :: pfactor(my_r%min:my_r%max)
-        Integer :: r,k, t
         pfactor(my_r%min:my_r%max) = ref%dpdr_w_term(my_r%min:my_r%max) &
                                         /ref%density(my_r%min:my_r%max)
         
-        
-        
-          !!!!!!!!!!!!!!!!!!!!!!!!! Advection Force !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
+        !!!!!!!!!!!!!!!!!!!!!!!!! Advection Force !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         If (compute_quantity(curl_v_grad_v_r) .or. compute_quantity(curl_v_grad_v_r_squared)) Then
             If (compute_quantity(curl_v_grad_v_r)) Then
@@ -52,7 +79,6 @@ Contains
             Endif            
             
         Endif
-    
     
         If (compute_quantity(curl_v_grad_v_theta) .or. compute_quantity(curl_v_grad_v_theta_squared)) Then
             If (compute_quantity(curl_v_grad_v_theta)) Then
@@ -127,8 +153,15 @@ Contains
             Endif
 
         Endif
+
+    End Subroutine Compute_Curl_Advection_Force
+
+    Subroutine Compute_Curl_Buoyancy_Force(buffer)
+        Implicit None
+        Real*8, Intent(InOut) :: buffer(1:,my_r%min:,my_theta%min:,1:)
+        Integer :: r, k, t
         
-                !!!!!!!!!!!!!!!!!!!!!!!!!! Buoyancy Force !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        !!!!!!!!!!!!!!!!!!!!!!!!!! Buoyancy Force !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   
 
         If (compute_quantity(curl_buoyancy_force_theta) .or. compute_quantity(curl_buoyancy_force_theta_squared)) Then
@@ -167,8 +200,15 @@ Contains
             Endif
 
         Endif
-         
-         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Magnetic Force !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    End Subroutine Compute_Curl_Buoyancy_Force
+
+    Subroutine Compute_Curl_Magnetic_Force(buffer)
+        Implicit None
+        Real*8, Intent(InOut) :: buffer(1:,my_r%min:,my_theta%min:,1:)
+        Integer :: r, k, t         
+
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Magnetic Force !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         If (compute_quantity(curl_j_cross_b_r) .or. compute_quantity(curl_j_cross_b_r_squared)) Then
             If (compute_quantity(curl_j_cross_b_r)) Then
@@ -286,7 +326,6 @@ Contains
 
         Endif
         
-        
         If (compute_quantity(curl_j_cross_b_phi) .or. compute_quantity(curl_j_cross_b_phi_squared)) Then
             If (compute_quantity(curl_j_cross_b_phi)) Then
                 DO_PSI
@@ -340,7 +379,14 @@ Contains
 
         Endif
 
-            !!!!!!!!!!!!!!!!!!!!!!!!!!!! Coriolis Force !!!!!!!!!!!!!!!!!!!!!!!!!!
+    End Subroutine Compute_Curl_Magnetic_Force
+
+    Subroutine Compute_Curl_Coriolis_Force(buffer)
+        Implicit None
+        Real*8, Intent(InOut) :: buffer(1:,my_r%min:,my_theta%min:,1:)
+        Integer :: r, k, t
+
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!! Coriolis Force !!!!!!!!!!!!!!!!!!!!!!!!!!
 
         If (compute_quantity(curl_coriolis_force_r) .or. compute_quantity(curl_coriolis_force_r_squared)) Then
             If (compute_quantity(curl_coriolis_force_r)) Then
@@ -404,11 +450,18 @@ Contains
         
         Endif
 
+    End Subroutine Compute_Curl_Coriolis_Force
 
+    Subroutine Compute_Curl_Pressure_Force(buffer)
+        Implicit None
+        Real*8, Intent(InOut) :: buffer(1:,my_r%min:,my_theta%min:,1:)
+        Integer :: r, k, t
+        ! NOTE: pfactor is assumed constant in the derivation below
+        Real*8  :: pfactor(my_r%min:my_r%max)
+        pfactor(my_r%min:my_r%max) = ref%dpdr_w_term(my_r%min:my_r%max) &
+                                        /ref%density(my_r%min:my_r%max)
 
         !!!!!!!!!!!!!!!!!!!!!!!!!!! Pressure Force !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 
        If (compute_quantity(curl_pressure_force_r) .or. compute_quantity(curl_pressure_force_r_squared)) Then
             If (compute_quantity(curl_pressure_force_r)) Then
@@ -467,5 +520,7 @@ Contains
                 Call Add_Quantity(qty)
             Endif
         Endif
-        
+
+    End Subroutine Compute_Curl_Pressure_Force
  
+End Module Diagnostics_Curl_Momentum
