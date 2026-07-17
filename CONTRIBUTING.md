@@ -1,4 +1,3 @@
-I am testing the pull request
 # Contributing to Rayleigh
 Rayleigh is a community project that lives by the participation of its
 members — i.e., including you! It is our goal to build an inclusive
