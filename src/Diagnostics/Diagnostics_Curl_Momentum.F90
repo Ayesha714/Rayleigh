@@ -38,6 +38,7 @@ Contains
         Call Compute_Curl_Magnetic_Force(buffer)
         Call Compute_Curl_Coriolis_Force(buffer)
         Call Compute_Curl_Pressure_Force(buffer)
+        Call Compute_Curl_Viscous_Force(buffer)
     End Subroutine
 
     Subroutine Compute_Curl_Advection_Force(buffer)
@@ -548,6 +549,42 @@ Contains
         Endif
 
     End Subroutine Compute_Curl_Pressure_Force
+
+    Subroutine Compute_Curl_Viscous_Force(buffer)
+        Implicit None
+        Real*8, Intent(InOut) :: buffer(1:,my_r%min:,my_theta%min:,1:)
+        Integer :: r, k, t
+
+        !!!!!!!!!!!!!!!!!!!!!!!!!!! Viscous Force !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        If (compute_quantity(curl_viscous_force_r)) Then
+            DO_PSI
+                qty(PSI) = One_Over_R(r)*(VFDBUFF(PSI,dvf_p_dt) + &
+                                cottheta(t)*vforce_buffer(PSI,vfp_r) - &
+                                csctheta(t)*VFDBUFF(PSI,dvf_t_dp))
+            END_DO
+            Call Add_Quantity(qty)   
+        Endif
+
+        If (compute_quantity(curl_viscous_force_theta)) Then
+            DO_PSI
+                qty(PSI) = One_Over_R(r)*(csctheta(t)*VFDBUFF(PSI,dvf_r_dp) - &
+                                vforce_buffer(PSI,vfp_p)) - &
+                           VFDBUFF(PSI,dvf_p_dr)
+            END_DO
+            Call Add_Quantity(qty)
+        Endif
+         
+        If (compute_quantity(curl_viscous_force_phi)) Then
+            DO_PSI
+                qty(PSI) = VFDBUFF(PSI,dvf_t_dr) + &
+                           One_Over_R(r)*(vforce_buffer(PSI,vfp_t) - &
+                             VFDBUFF(PSI,dvf_r_dt))
+            END_DO
+            Call Add_Quantity(qty)
+        Endif
+
+    End Subroutine Compute_Curl_Viscous_Force
 
     Subroutine Initialize_Grad_Viscous_Force()
         Implicit None
