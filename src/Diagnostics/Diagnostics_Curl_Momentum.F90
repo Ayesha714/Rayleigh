@@ -18,9 +18,16 @@
 !  <http://www.gnu.org/licenses/>.
 !
 
+#include "indices.F"
+
 Module Diagnostics_Curl_Momentum
     Use Diagnostics_Base
+    Use Spectral_Derivatives
+    Use Finite_Difference, Only : d_by_dx3d3
     Implicit None
+
+    Integer, Allocatable :: vfdindmap(:,:)
+    Integer :: nvffields
 
 Contains
 
@@ -47,14 +54,18 @@ Contains
         If (compute_quantity(curl_v_grad_v_r) .or. compute_quantity(curl_v_grad_v_r_squared)) Then
             If (compute_quantity(curl_v_grad_v_r)) Then
                 DO_PSI
-                    qty(PSI) = one_over_r(r) * ref%density(r) * (buffer(PSI,vr) * one_over_r(r) * DDBUFF(PSI,dvpdrdt) + &
-                               buffer(PSI,dvrdt) * one_over_r(r) * buffer(PSI,dvpdr) + buffer(PSI,vtheta) * &
-                               one_over_r(r) * DDBUFF(PSI,dvpdtdt) + buffer(PSI,dvtdt) * one_over_r(r) * & 
-                               buffer(PSI,dvpdt) + buffer(PSI,vphi) * one_over_r(r) * (csctheta(t) * DDBUFF(PSI,dvpdtdp) - &
-                               csctheta(t) * csctheta(t) * costheta(t) * buffer(PSI,dvpdp) + buffer(PSI,dvrdt) + &
-                               cottheta(t) * buffer(PSI,dvtdt) - csctheta(t) * &
-                               csctheta(t) * buffer(PSI,vtheta)) + buffer(PSI,dvpdt) * one_over_r(r) * (csctheta(t) * &
-                               buffer(PSI,dvpdp) + buffer(PSI,vr) + cottheta(t) * buffer(PSI,vtheta))) + &
+                    qty(PSI) = one_over_r(r) * ref%density(r) * ( &
+                                 buffer(PSI,vr) * one_over_r(r) * DDBUFF(PSI,dvpdrdt) + &
+                                 buffer(PSI,dvrdt) * one_over_r(r) * buffer(PSI,dvpdr) + &
+                                 buffer(PSI,vtheta) * one_over_r(r) * DDBUFF(PSI,dvpdtdt) + &
+                                 buffer(PSI,dvtdt) * one_over_r(r) * buffer(PSI,dvpdt) + &
+                                 buffer(PSI,vphi) * one_over_r(r) * (csctheta(t) * DDBUFF(PSI,dvpdtdp) - &
+                                   csctheta(t) * csctheta(t) * costheta(t) * buffer(PSI,dvpdp) + &
+                                   buffer(PSI,dvrdt) + &
+                                   cottheta(t) * buffer(PSI,dvtdt) - &
+                                   csctheta(t) * csctheta(t) * buffer(PSI,vtheta)) + &
+                                 buffer(PSI,dvpdt) * one_over_r(r) * (csctheta(t) * buffer(PSI,dvpdp) + &
+                                   buffer(PSI,vr) + cottheta(t) * buffer(PSI,vtheta))) + &
                                one_over_r(r) * costheta(t) * csctheta(t) * ref%density(r) * (buffer(PSI,vr) * &
                                one_over_r(r) * buffer(PSI,dvpdr) + buffer(PSI,vtheta) * one_over_r(r) * &
                                buffer(PSI,dvpdt) + buffer(PSI,vphi) * one_over_r(r) * (csctheta(t) * &
@@ -92,16 +103,20 @@ Contains
                                one_over_r(r) * ref%density(r) * (buffer(PSI,vr) * one_over_r(r) * buffer(PSI,dvpdr) + &
                                buffer(PSI,vtheta) * one_over_r(r) * buffer(PSI,dvpdt) + buffer(PSI,vphi) * one_over_r(r) * &
                                (csctheta(t) * buffer(PSI,dvpdp) + buffer(PSI,vr) + cottheta(t) * buffer(PSI,vtheta))) - &
-                               ref%density(r) * (buffer(PSI,vr) * one_over_r(r) * DDBUFF(PSI,dvpdrdr) + buffer(PSI,dvrdr) * &
-                               one_over_r(r) * buffer(PSI,dvpdr) - buffer(PSI,vr) * one_over_r(r) * one_over_r(r) * &
-                               buffer(PSI,dvpdr) + buffer(PSI,vtheta) * one_over_r(r) * DDBUFF(PSI,dvpdrdt) + &
-                               buffer(PSI,dvtdr) * one_over_r(r) * buffer(PSI,dvpdt) - buffer(PSI,vtheta) * one_over_r(r) * &
-                               one_over_r(r) * buffer(PSI,dvpdt) + &
-                               buffer(PSI,vtheta) * one_over_r(r) * (csctheta(t) * DDBUFF(PSI,dvpdrdp) + &
-                               buffer(PSI,dvrdr) + cottheta(t) * buffer(PSI,dvtdr)) + &
-                               buffer(PSI,dvpdr) * one_over_r(r) * (csctheta(t) * buffer(PSI,dvpdp) + buffer(PSI,vr) + &
-                               cottheta(t) * buffer(PSI,vtheta)) - buffer(PSI,vphi) *  one_over_r(r) * one_over_r(r) * &
-                               (csctheta(t) *  buffer(PSI,dvpdp) + buffer(PSI,vr) + cottheta(t) * buffer(PSI,vtheta))) - &
+                               ref%density(r) * (buffer(PSI,vr) * one_over_r(r) * DDBUFF(PSI,dvpdrdr) + &
+                                 buffer(PSI,dvrdr) * one_over_r(r) * buffer(PSI,dvpdr) - &
+                                 buffer(PSI,vr) * one_over_r(r) * one_over_r(r) * buffer(PSI,dvpdr) + &
+                                 buffer(PSI,vtheta) * one_over_r(r) * DDBUFF(PSI,dvpdrdt) + &
+                                 buffer(PSI,dvtdr) * one_over_r(r) * buffer(PSI,dvpdt) - &
+                                 buffer(PSI,vtheta) * one_over_r(r) * one_over_r(r) * buffer(PSI,dvpdt) + &
+                                 buffer(PSI,vtheta) * one_over_r(r) * (csctheta(t) * DDBUFF(PSI,dvpdrdp) + &
+                                   buffer(PSI,dvrdr) + &
+                                   cottheta(t) * buffer(PSI,dvtdr)) + &
+                                 buffer(PSI,dvpdr) * one_over_r(r) * (csctheta(t) * buffer(PSI,dvpdp) + &
+                                 buffer(PSI,vr) + &
+                                 cottheta(t) * buffer(PSI,vtheta)) - &
+                                 buffer(PSI,vphi) *  one_over_r(r) * one_over_r(r) * (csctheta(t) *  buffer(PSI,dvpdp) + &
+                                   buffer(PSI,vr) + cottheta(t) * buffer(PSI,vtheta))) - &
                                ref%dlnrho(r) * &
                                ref%density(r) * (buffer(PSI,vr) * one_over_r(r) * buffer(PSI,dvpdr) + &
                                buffer(PSI,vtheta) * one_over_r(r) * buffer(PSI,dvpdt) + buffer(PSI,vphi) * one_over_r(r) * &
@@ -121,25 +136,34 @@ Contains
         If (compute_quantity(curl_v_grad_v_phi) .or. compute_quantity(curl_v_grad_v_phi_squared)) Then
             If (compute_quantity(curl_v_grad_v_theta)) Then
                 DO_PSI
-                    qty(PSI) = ref%density(r) * (buffer(PSI,vr) * DDBUFF(PSI,dvtdrdr) + buffer(PSI,dvrdr) * buffer(PSI,dvtdr) + &
-                               buffer(PSI,vtheta) * one_over_r(r) * (DDBUFF(PSI,dvtdrdt) + buffer(PSI,dvrdr)) + &
-                               buffer(PSI,dvtdr) * one_over_r(r) * (buffer(PSI,dvtdt) + buffer(PSI,vr)) - &
-                               buffer(PSI,vtheta) * one_over_r(r) * one_over_r(r) * (buffer(PSI,dvtdt) + buffer(PSI,vr)) + &
-                               buffer(PSI,vtheta) * one_over_r(r) * (csctheta(t) * DDBUFF(PSI,dvtdrdp) - cottheta(t) * & 
-                               buffer(PSI,dvpdr)) + buffer(PSI,dvpdr) * one_over_r(r) * (csctheta(t) * buffer(PSI,dvtdp) - &
-                               cottheta(t) * buffer(PSI,vphi)) - buffer(PSI,vphi) * one_over_r(r) * one_over_r(r) * &
-                               (csctheta(t) * buffer(PSI,dvtdp) - cottheta(t) * buffer(PSI,vphi))) + &   
+                    qty(PSI) = ref%density(r) * (buffer(PSI,vr) * DDBUFF(PSI,dvtdrdr) + &
+                                 buffer(PSI,dvrdr) * buffer(PSI,dvtdr) + &
+                                 buffer(PSI,vtheta) * one_over_r(r) * (DDBUFF(PSI,dvtdrdt) + &
+                                 buffer(PSI,dvrdr)) + &
+                                 buffer(PSI,dvtdr) * one_over_r(r) * (buffer(PSI,dvtdt) + &
+                                 buffer(PSI,vr)) - &
+                                 buffer(PSI,vtheta) * one_over_r(r) * one_over_r(r) * (buffer(PSI,dvtdt) + &
+                                   buffer(PSI,vr)) + &
+                                   buffer(PSI,vtheta) * one_over_r(r) * (csctheta(t) * DDBUFF(PSI,dvtdrdp) - &
+                                   cottheta(t) * buffer(PSI,dvpdr)) + &
+                                 buffer(PSI,dvpdr) * one_over_r(r) * (csctheta(t) * buffer(PSI,dvtdp) - &
+                                 cottheta(t) * buffer(PSI,vphi)) - &
+                                 buffer(PSI,vphi) * one_over_r(r) * one_over_r(r) * (csctheta(t) * buffer(PSI,dvtdp) - &
+                                   cottheta(t) * buffer(PSI,vphi))) + &   
                                ref%dlnrho(r) * ref%density(r) * (buffer(PSI,vr) * buffer(PSI,dvtdr) + buffer(PSI,vtheta) * &
                                one_over_r(r) * (buffer(PSI,dvtdt) + buffer(PSI,vr)) + buffer(PSI,vphi) * one_over_r(r) * &
                                (csctheta(t) * buffer(PSI,dvtdp) - cottheta(t) * buffer(PSI,vphi))) + &
                                one_over_r(r) * ref%density(r) * (buffer(PSI,vr) * buffer(PSI,dvtdr) + buffer(PSI,vtheta) * &
                                one_over_r(r) * (buffer(PSI,dvtdt) + buffer(PSI,vr)) + buffer(PSI,vphi) * one_over_r(r) * &
                                (csctheta(t) * buffer(PSI,dvtdp) - cottheta(t) * buffer(PSI,vphi))) - &
-                               one_over_r(r) * ref%density(r) * (buffer(PSI,vr) * DDBUFF(PSI,dvrdrdt) + buffer(PSI,dvrdt) * &
-                               buffer(PSI,dvrdr) + buffer(PSI,vtheta) * one_over_r(r) * (DDBUFF(PSI,dvrdtdt) + buffer(PSI,dvtdt)) + &
+                               one_over_r(r) * ref%density(r) * (buffer(PSI,vr) * DDBUFF(PSI,dvrdrdt) + &
+                                 buffer(PSI,dvrdt) * buffer(PSI,dvrdr) + buffer(PSI,vtheta) * one_over_r(r) * &
+                                 (DDBUFF(PSI,dvrdtdt) + buffer(PSI,dvtdt)) + &
                                buffer(PSI,dvtdt) * one_over_r(r) * (buffer(PSI,dvrdt) - buffer(PSI,vtheta)) + &
-                               buffer(PSI,vphi) * one_over_r(r) * (csctheta(t) * DDBUFF(PSI,dvrdtdp) - csctheta(t) * csctheta(t) * &
-                               costheta(t) * buffer(PSI,dvrdp) - buffer(PSI,dvpdt)) + buffer(PSI,dvpdt) * one_over_r(r) * &
+                               buffer(PSI,vphi) * one_over_r(r) * (csctheta(t) * DDBUFF(PSI,dvrdtdp) - &
+                                 csctheta(t) * csctheta(t) * costheta(t) * buffer(PSI,dvrdp) - &
+                                 buffer(PSI,dvpdt)) + &
+                               buffer(PSI,dvpdt) * one_over_r(r) * &
                                (csctheta(t) * buffer(PSI,dvrdp) - buffer(PSI,vphi)))
                                   
                 END_DO
@@ -221,8 +245,10 @@ Contains
                                buffer(PSI,bphi) + &                         
                                one_over_r(r) * one_over_r(r) * csctheta(t) * costheta(t) * buffer(PSI,btheta) * &
                                buffer(PSI,dbpdt) - &
-                               one_over_r(r) * one_over_r(r) * csctheta(t) * csctheta(t) * buffer(PSI,dbtdt) * buffer(PSI,dbtdp) - &
-                               one_over_r(r) * one_over_r(r) * csctheta(t) * csctheta(t) * buffer(PSI,btheta) * DDBUFF(PSI,dbtdtdp) + & 
+                               one_over_r(r) * one_over_r(r) * csctheta(t) * csctheta(t) * &
+                                 buffer(PSI,dbtdt) * buffer(PSI,dbtdp) - &
+                               one_over_r(r) * one_over_r(r) * csctheta(t) * csctheta(t) * &
+                                 buffer(PSI,btheta) * DDBUFF(PSI,dbtdtdp) + & 
                                one_over_r(r) * one_over_r(r) * csctheta(t) * csctheta(t) * costheta(t) * buffer(PSI,btheta) * &
                                buffer(PSI,dbtdp) + &
                                one_over_r(r) * one_over_r(r) * csctheta(t) * csctheta(t) * costheta(t) * &
@@ -522,5 +548,252 @@ Contains
         Endif
 
     End Subroutine Compute_Curl_Pressure_Force
+
+    Subroutine Initialize_Grad_Viscous_Force()
+        Implicit None
+        integer :: nvfind, nvfdind, vfoff
+        integer :: nvfdrfields, nvfdtfields, nvfdpfields
+        integer :: vfdfcount(3,2) ! buffer sizes
+        Integer :: vf_i(9) ! indices to vforce_buffer
+        Logical :: compute_vforce_i_dj(9,3)
+        Integer :: i, j
+
+        dvf_r_dt = -1
+        dvf_r_dp = -1
+        dvf_t_dr = -1
+        dvf_t_dp = -1
+        dvf_p_dr = -1
+        dvf_p_dt = -1
+        dvfp_r_dt = -1
+        dvfp_r_dp = -1
+        dvfp_t_dr = -1
+        dvfp_t_dp = -1
+        dvfp_p_dr = -1
+        dvfp_p_dt = -1
+        dvfm_r_dt = -1
+        dvfm_r_dp = -1
+        dvfm_t_dr = -1
+        dvfm_t_dp = -1
+        dvfm_p_dr = -1
+        dvfm_p_dt = -1
+
+        vf_i = [vf_r, vf_t, vf_p, vfp_r, vfp_t, vfp_p, vfm_r, vfm_t, vfm_p]
+        compute_vforce_i_dj = .false.
+
+        vfoff = 0
+        If (sometimes_compute(curl_viscous_force_r)) Then
+            compute_vforce_i_dj(2,3) = .true.
+            compute_vforce_i_dj(3,2) = .true.
+        Endif
+
+        If (sometimes_compute(curl_viscous_force_theta)) Then
+            compute_vforce_i_dj(1,3) = .true.
+            compute_vforce_i_dj(3,1) = .true.
+        Endif
+
+        If (sometimes_compute(curl_viscous_force_phi)) Then
+            compute_vforce_i_dj(1,2) = .true.
+            compute_vforce_i_dj(2,1) = .true.
+        Endif
+
+        vfoff = 3
+        If (sometimes_compute(curl_viscous_pforce_r)) Then
+            compute_vforce_i_dj(vfoff+2,3) = .true.
+            compute_vforce_i_dj(vfoff+3,2) = .true.
+        Endif
+
+        If (sometimes_compute(curl_viscous_pforce_theta)) Then
+            compute_vforce_i_dj(vfoff+1,3) = .true.
+            compute_vforce_i_dj(vfoff+3,1) = .true.
+        Endif
+
+        If (sometimes_compute(curl_viscous_pforce_phi)) Then
+            compute_vforce_i_dj(vfoff+1,2) = .true.
+            compute_vforce_i_dj(vfoff+2,1) = .true.
+        Endif
+
+        vfoff = 6
+        If (sometimes_compute(curl_viscous_mforce_r)) Then
+            compute_vforce_i_dj(vfoff+2,3) = .true.
+            compute_vforce_i_dj(vfoff+3,2) = .true.
+        Endif
+
+        If (sometimes_compute(curl_viscous_mforce_theta)) Then
+            compute_vforce_i_dj(vfoff+1,3) = .true.
+            compute_vforce_i_dj(vfoff+3,1) = .true.
+        Endif
+
+        If (sometimes_compute(curl_viscous_mforce_phi)) Then
+            compute_vforce_i_dj(vfoff+1,2) = .true.
+            compute_vforce_i_dj(vfoff+2,1) = .true.
+        Endif
+
+        ! work out how many vf fields we'll be taking the derivative of
+        nvffields = count(count(compute_vforce_i_dj, dim=2) .gt. 0)
+        Allocate(vfdindmap(nvffields,4))
+        vfdindmap(:,:) = -1
+        need_vforce_derivatives = nvffields .gt. 0
+        
+        ! next assign indices to vf_i and vforce derivative entries
+        ! this loop is designed to make sure the new derivative fields are indexed
+        ! in r, t, p order so that we can grow the buffers appropriately
+        nvfdind = 0
+        do j = 1, 3
+            nvfind = 0
+            do i = 1, 9
+                if (count(compute_vforce_i_dj(i,:)) .gt. 0) then
+                    nvfind = nvfind + 1
+                    ! assign indices to vforce_buffer in first column (on first outer loop)
+                    if (j .eq. 1) vfdindmap(nvfind, 1) = vf_i(i)
+                    if (compute_vforce_i_dj(i,j)) then
+                        nvfdind = nvfdind + 1
+                        if ((i .eq. 1) .and. (j .eq. 2)) dvf_r_dt = nvfdind
+                        if ((i .eq. 1) .and. (j .eq. 3)) dvf_r_dp = nvfdind
+                        if ((i .eq. 2) .and. (j .eq. 1)) dvf_t_dr = nvfdind
+                        if ((i .eq. 2) .and. (j .eq. 3)) dvf_t_dp = nvfdind
+                        if ((i .eq. 3) .and. (j .eq. 1)) dvf_p_dr = nvfdind
+                        if ((i .eq. 3) .and. (j .eq. 2)) dvf_p_dt = nvfdind
+                        vfoff = 3
+                        if ((i .eq. vfoff+1) .and. (j .eq. 2)) dvfp_r_dt = nvfdind
+                        if ((i .eq. vfoff+1) .and. (j .eq. 3)) dvfp_r_dp = nvfdind
+                        if ((i .eq. vfoff+2) .and. (j .eq. 1)) dvfp_t_dr = nvfdind
+                        if ((i .eq. vfoff+2) .and. (j .eq. 3)) dvfp_t_dp = nvfdind
+                        if ((i .eq. vfoff+3) .and. (j .eq. 1)) dvfp_p_dr = nvfdind
+                        if ((i .eq. vfoff+3) .and. (j .eq. 2)) dvfp_p_dt = nvfdind
+                        vfoff = 6
+                        if ((i .eq. vfoff+1) .and. (j .eq. 2)) dvfm_r_dt = nvfdind
+                        if ((i .eq. vfoff+1) .and. (j .eq. 3)) dvfm_r_dp = nvfdind
+                        if ((i .eq. vfoff+2) .and. (j .eq. 1)) dvfm_t_dr = nvfdind
+                        if ((i .eq. vfoff+2) .and. (j .eq. 3)) dvfm_t_dp = nvfdind
+                        if ((i .eq. vfoff+3) .and. (j .eq. 1)) dvfm_p_dr = nvfdind
+                        if ((i .eq. vfoff+3) .and. (j .eq. 2)) dvfm_p_dt = nvfdind
+                        vfdindmap(nvfind, j+1) = nvfdind
+                    endif
+                endif
+            enddo
+        enddo
+
+        ! work out how many of each type of derivative we're taking
+        nvfdrfields = count(compute_vforce_i_dj(:,1))
+        nvfdtfields = count(compute_vforce_i_dj(:,2))
+        nvfdpfields = count(compute_vforce_i_dj(:,3))
+
+        ! size the buffers at each config stage
+        vfdfcount(1,1) = nvffields + nvfdrfields ! config 1a
+        vfdfcount(2,1) = nvffields + nvfdrfields + nvfdtfields ! 2a
+        vfdfcount(3,1) = nvffields + nvfdrfields + nvfdtfields + nvfdpfields ! 3a
+        vfdfcount(3,2) = nvffields ! 3b
+        vfdfcount(2,2) = nvffields ! 2b
+        vfdfcount(1,2) = nvffields + nvfdrfields ! 1b
+
+        Call d_vforce_buffer%init(field_count = vfdfcount, config = 'p3b')
+
+        Call d_vforce_buffer%construct('p3a')
+
+        Call d_vforce_buffer%deconstruct('p3a')
+
+    End Subroutine Initialize_Grad_Viscous_Force
+
+    Subroutine Grad_Viscous_Force()
+        Implicit None
+        Integer :: i, r, k, t
+
+        call d_vforce_buffer%construct('p3b')
+        d_vforce_buffer%config = 'p3b'
+
+        ! load the fields we want to take derivatives of
+        do i = 1, nvffields
+            d_vforce_buffer%p3b(:,:,:,i) = vforce_buffer(:,:,:,vfdindmap(i, 1))
+        enddo
+
+        ! transform to Fourier m space
+        Call fft_to_spectral(d_vforce_buffer%p3b, rsc = .true.)
+
+        ! reform to hybrid rlm space
+        call d_vforce_buffer%reform() ! move to p2b
+
+        ! deallocate p3b
+        call d_vforce_buffer%deconstruct('p3b')
+
+        ! allocate spectral buffer and transform
+        call d_vforce_buffer%construct('s2b')
+        call Legendre_Transform(d_vforce_buffer%p2b, d_vforce_buffer%s2b)
+
+        ! deallocate p2b
+        call d_vforce_buffer%deconstruct('p2b')
+
+        ! reform
+        call d_vforce_buffer%reform() ! move to p1b
+
+        ! do a little gymnastics with p1a and p1b
+        call d_vforce_buffer%construct('p1a')
+        if (chebyshev) then
+            ! store chebyshev coefficients in p1a and dealias
+            call gridcp%to_Spectral(d_vforce_buffer%p1b, d_vforce_buffer%p1a)
+            call gridcp%dealias_buffer(d_vforce_buffer%p1a)
+        else
+            d_vforce_buffer%p1a = d_vforce_buffer%p1b
+        end if
+
+        ! take d_by_dr
+        ! (and transform back to grid space if in Chebyshev)
+        if (chebyshev) then
+            do i = 1, nvffields
+                if (vfdindmap(i,2) .gt. 0) then
+                    call gridcp%d_by_dr_cp(i, vfdindmap(i,2), d_vforce_buffer%p1a, 1)
+                endif
+            enddo
+            call gridcp%from_spectral(d_vforce_buffer%p1a, d_vforce_buffer%p1b)
+            ! FIXME: different to second derivatives
+            d_vforce_buffer%p1a = d_vforce_buffer%p1b
+        else
+            do i = 1, nvffields
+                if (vfdindmap(i,2) .gt. 0) then
+                    call d_by_dx3d3(i, vfdindmap(i,2), d_vforce_buffer%p1a,1)
+                endif
+            enddo
+        end if
+
+        ! moving back, but first we need grid space in p1a
+        d_vforce_buffer%config = 'p1a'
+        call d_vforce_buffer%deconstruct('p1b')
+
+        ! reform and start moving back
+        call d_vforce_buffer%reform() ! now in s2a
+
+        ! take theta derivatives
+        do i = 1, nvffields
+            if (vfdindmap(i,3) .gt. 0) then
+                call d_by_dtheta(d_vforce_buffer%s2a, i, vfdindmap(i,3))
+            endif
+        enddo
+
+        call d_vforce_buffer%construct('p2a')
+        call Legendre_Transform(d_vforce_buffer%s2a, d_vforce_buffer%p2a)
+        call d_vforce_buffer%deconstruct('s2a')
+
+        ! reform
+        call d_vforce_buffer%reform() ! move to p2a
+
+        ! take d_by_dphi derivatives
+        do i = 1, nvffields
+            if (vfdindmap(i,4) .gt. 0) then
+                call d_by_dphi(d_vforce_buffer%p3a, i, vfdindmap(i,4))
+            endif
+        enddo
+
+        ! transform to grid space
+        call FFT_To_Physical(d_vforce_buffer%p3a, rsc=.true.)
+
+        ! Convert sintheta*{dxdt} to dxdt
+        do i = 1, nvffields
+            if (vfdindmap(i,3) .gt. 0) then
+                DO_PSI
+                    d_vforce_buffer%p3a(PSI,i) = d_vforce_buffer%p3a(PSI,i)*csctheta(t)
+                END_DO
+            end if
+        enddo
+
+    End Subroutine Grad_Viscous_Force
  
 End Module Diagnostics_Curl_Momentum

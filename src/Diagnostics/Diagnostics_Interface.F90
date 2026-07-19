@@ -31,6 +31,7 @@ Module Diagnostics_Interface
     Use Diagnostics_Base
 
     Use Diagnostics_Second_Derivatives
+    Use Diagnostics_Curl_Momentum
 
     Use Diagnostics_Mean_Correction
 
@@ -189,6 +190,10 @@ Contains
             over_n_phi = 1.0d0/dble(n_phi)
 
             Call Viscous_Force(buffer) ! Pre-calculate the viscous forces and place them in the vforce_buffer
+
+            if (need_vforce_derivatives) then
+                Call Grad_Viscous_Force()
+            endif
             
             Call Mean_Correction(buffer)    ! Remove ell=0 component from radial and theta forces
 
@@ -337,6 +342,8 @@ Contains
 
 
         Call Initialize_Second_Derivatives()
+
+        Call Initialize_Grad_Viscous_Force()
 
         Call Initialize_Diagnostics_Buffer()
 

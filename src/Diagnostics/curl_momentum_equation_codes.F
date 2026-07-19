@@ -85,13 +85,13 @@
     Integer, Parameter :: curl_viscous_force_theta   = curl_mom_eq_off+40 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D})\right)\right]_\theta$
     Integer, Parameter :: curl_viscous_force_phi     = curl_mom_eq_off+41 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D})\right)\right]_\phi$
 
-!    Integer, Parameter :: curl_viscous_pforce_r      = curl_mom_eq_off+42 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D'})\right)\right]_r$
-!    Integer, Parameter :: curl_viscous_pforce_theta  = curl_mom_eq_off+43 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D'})\right)\right]_\theta$
-!    Integer, Parameter :: curl_viscous_pforce_phi    = curl_mom_eq_off+44 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D'})\right)\right]_\phi$
+    Integer, Parameter :: curl_viscous_pforce_r      = curl_mom_eq_off+42 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D'})\right)\right]_r$
+    Integer, Parameter :: curl_viscous_pforce_theta  = curl_mom_eq_off+43 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D'})\right)\right]_\theta$
+    Integer, Parameter :: curl_viscous_pforce_phi    = curl_mom_eq_off+44 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\boldsymbol{\mathcal D'})\right)\right]_\phi$
 
-!    Integer, Parameter :: curl_viscous_mforce_r      = curl_mom_eq_off+45 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal D}})\right)\right]_r$
-!    Integer, Parameter :: curl_viscous_mforce_theta  = curl_mom_eq_off+46 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal D}})\right)\right]_\theta$
-!    Integer, Parameter :: curl_viscous_mforce_phi    = curl_mom_eq_off+47 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal D}})\right)\right]_\phi$
+    Integer, Parameter :: curl_viscous_mforce_r      = curl_mom_eq_off+45 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal D}})\right)\right]_r$
+    Integer, Parameter :: curl_viscous_mforce_theta  = curl_mom_eq_off+46 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal D}})\right)\right]_\theta$
+    Integer, Parameter :: curl_viscous_mforce_phi    = curl_mom_eq_off+47 ! :tex: $\left[\boldsymbol{\nabla}\times\left(c_5\,(\boldsymbol{\nabla}\cdot\overline{\boldsymbol{\mathcal D}})\right)\right]_\phi$
 
     ! Pressure forces
     Integer, Parameter :: curl_pressure_force_r       = curl_mom_eq_off+48 ! :tex: 

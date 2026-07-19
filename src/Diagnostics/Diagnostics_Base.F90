@@ -60,6 +60,7 @@ Module Diagnostics_Base
     include "magnetic_energy_codes.F"
 
     include "momentum_equation_codes.F"
+    include "curl_momentum_equation_codes.F"
     include "thermal_equation_codes.F"
     include "induction_equation_codes.F"
 
@@ -131,7 +132,6 @@ Module Diagnostics_Base
 
     Logical :: need_second_derivatives = .false.
 
-
     !////////////////////////////////////////////////////////////////////////////
     ! Variables related to mean-correction
     ! (we only correct radial terms, but retain logic for horizontal terms)
@@ -151,6 +151,20 @@ Module Diagnostics_Base
     Integer :: vf_r, vf_t, vf_p
     Integer :: vfp_r, vfp_t, vfp_p
     Integer :: vfm_r, vfm_t, vfm_p
+
+    ! A special buffer used for holding first derivatives of the viscous forces at output time
+    Type(SphericalBuffer) :: d_vforce_buffer
+    Integer :: dvf_r_dt,  dvf_r_dp
+    Integer :: dvf_t_dr,  dvf_t_dp
+    Integer :: dvf_p_dr,  dvf_p_dt
+    Integer :: dvfp_r_dt, dvfp_r_dp
+    Integer :: dvfp_t_dr, dvfp_t_dp
+    Integer :: dvfp_p_dr, dvfp_p_dt
+    Integer :: dvfm_r_dt, dvfm_r_dp
+    Integer :: dvfm_t_dr, dvfm_t_dp
+    Integer :: dvfm_p_dr, dvfm_p_dt
+
+    Logical :: need_vforce_derivatives = .false.
 
 Contains
 

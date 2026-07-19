@@ -400,6 +400,7 @@ Contains
                 Call d_by_dx3d3(i,j,d2buffer%p1a,1)
             Enddo
         Endif
+        ! CRW: Is this right in finite differences?
         d2buffer%p1a=d2buffer%p1b
         Call d2buffer%deconstruct('p1b')
 

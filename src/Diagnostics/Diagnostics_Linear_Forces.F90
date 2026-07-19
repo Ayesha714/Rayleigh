@@ -519,56 +519,74 @@ Contains
 
         If (compute_quantity(viscous_force_r) .or. &
             compute_quantity(visc_work) .or. &
+            compute_quantity(curl_viscous_force_theta) .or. &
+            compute_quantity(curl_viscous_force_phi) .or. &
             compute_quantity(viscous_mforce_r)) Then
             nvf = nvf+1
             vf_r = nvf
         Endif
 
         If (compute_quantity(viscous_force_theta) .or. &
-            compute_quantity(visc_work)) Then
+            compute_quantity(visc_work) .or. &
+            compute_quantity(curl_viscous_force_r) .or. &
+            compute_quantity(curl_viscous_force_phi)) Then
             nvf = nvf + 1
             vf_t = nvf
         Endif
 
         If (compute_quantity(viscous_force_phi) .or. &
-            compute_quantity(visc_work)) Then
+            compute_quantity(visc_work) .or. &
+            compute_quantity(curl_viscous_force_r) .or. &
+            compute_quantity(curl_viscous_force_theta)) Then
             nvf = nvf + 1
             vf_p = nvf
         Endif
 
         If (compute_quantity(viscous_pforce_r) .or. &
-            compute_quantity(visc_work_pp)) Then
+            compute_quantity(visc_work_pp) .or. &
+            compute_quantity(curl_viscous_pforce_theta) .or. &
+            compute_quantity(curl_viscous_pforce_phi)) Then
             nvf = nvf+1
             vfp_r = nvf
         Endif
 
         If (compute_quantity(viscous_pforce_theta) .or. &
-            compute_quantity(visc_work_pp)) Then
+            compute_quantity(visc_work_pp) .or. &
+            compute_quantity(curl_viscous_pforce_r) .or. &
+            compute_quantity(curl_viscous_pforce_phi)) Then
             nvf = nvf + 1
             vfp_t = nvf
         Endif
 
         If (compute_quantity(viscous_pforce_phi) .or. &
-            compute_quantity(visc_work_pp)) Then
+            compute_quantity(visc_work_pp).or. &
+            compute_quantity(curl_viscous_pforce_r) .or. &
+            compute_quantity(curl_viscous_pforce_theta)) Then
             nvf = nvf + 1
             vfp_p = nvf
         Endif
 
         If (compute_quantity(viscous_mforce_r) .or. &
-            compute_quantity(visc_work_mm)) Then
+            compute_quantity(visc_work_mm) .or. &
+            compute_quantity(curl_viscous_mforce_theta) .or. &
+            compute_quantity(curl_viscous_mforce_phi)) Then
             nvf = nvf+1
             vfm_r = nvf
         Endif
 
         If (compute_quantity(viscous_mforce_theta) .or. &
-            compute_quantity(visc_work_mm)) Then
+            compute_quantity(visc_work_mm).or. &
+            compute_quantity(curl_viscous_mforce_r) .or. &
+            compute_quantity(curl_viscous_mforce_phi)) Then
             nvf = nvf + 1
             vfm_t = nvf
         Endif
 
         If (compute_quantity(viscous_mforce_phi) .or. &
             compute_quantity(samom_diffusion) .or. &
-            compute_quantity(visc_work_mm)) Then
+            compute_quantity(visc_work_mm).or. &
+            compute_quantity(curl_viscous_mforce_r) .or. &
+            compute_quantity(curl_viscous_mforce_theta)) Then
             nvf = nvf + 1
             vfm_p = nvf
         Endif
