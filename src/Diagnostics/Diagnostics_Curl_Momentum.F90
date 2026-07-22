@@ -781,7 +781,6 @@ Contains
                 endif
             enddo
             call gridcp%from_spectral(d_vforce_buffer%p1a, d_vforce_buffer%p1b)
-            ! FIXME: different to second derivatives
             d_vforce_buffer%p1a = d_vforce_buffer%p1b
         else
             do i = 1, nvffields
