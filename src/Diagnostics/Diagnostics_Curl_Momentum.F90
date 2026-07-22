@@ -630,17 +630,17 @@ Contains
         compute_vforce_i_dj = .false.
 
         vfoff = 0
-        If (sometimes_compute(curl_viscous_force_r)) Then
+        If (sometimes_compute(curl_viscous_force_r) .or. sometimes_compute(curl_viscous_force_r_squared)) Then
             compute_vforce_i_dj(2,3) = .true.
             compute_vforce_i_dj(3,2) = .true.
         Endif
 
-        If (sometimes_compute(curl_viscous_force_theta)) Then
+        If (sometimes_compute(curl_viscous_force_theta) .or. sometimes_compute(curl_viscous_force_theta_squared)) Then
             compute_vforce_i_dj(1,3) = .true.
             compute_vforce_i_dj(3,1) = .true.
         Endif
 
-        If (sometimes_compute(curl_viscous_force_phi)) Then
+        If (sometimes_compute(curl_viscous_force_phi) .or. sometimes_compute(curl_viscous_force_phi_squared)) Then
             compute_vforce_i_dj(1,2) = .true.
             compute_vforce_i_dj(2,1) = .true.
         Endif

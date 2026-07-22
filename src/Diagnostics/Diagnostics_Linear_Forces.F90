@@ -520,7 +520,9 @@ Contains
         If (compute_quantity(viscous_force_r) .or. &
             compute_quantity(visc_work) .or. &
             compute_quantity(curl_viscous_force_theta) .or. &
+            compute_quantity(curl_viscous_force_theta_squared) .or. &
             compute_quantity(curl_viscous_force_phi) .or. &
+            compute_quantity(curl_viscous_force_phi_squared) .or. &
             compute_quantity(viscous_mforce_r)) Then
             nvf = nvf+1
             vf_r = nvf
@@ -529,7 +531,9 @@ Contains
         If (compute_quantity(viscous_force_theta) .or. &
             compute_quantity(visc_work) .or. &
             compute_quantity(curl_viscous_force_r) .or. &
-            compute_quantity(curl_viscous_force_phi)) Then
+            compute_quantity(curl_viscous_force_r_squared) .or. &
+            compute_quantity(curl_viscous_force_phi) .or. &
+            compute_quantity(curl_viscous_force_phi_squared)) Then
             nvf = nvf + 1
             vf_t = nvf
         Endif
@@ -537,7 +541,9 @@ Contains
         If (compute_quantity(viscous_force_phi) .or. &
             compute_quantity(visc_work) .or. &
             compute_quantity(curl_viscous_force_r) .or. &
-            compute_quantity(curl_viscous_force_theta)) Then
+            compute_quantity(curl_viscous_force_r_squared) .or. &
+            compute_quantity(curl_viscous_force_theta) .or. &
+            compute_quantity(curl_viscous_force_theta_squared)) Then
             nvf = nvf + 1
             vf_p = nvf
         Endif
