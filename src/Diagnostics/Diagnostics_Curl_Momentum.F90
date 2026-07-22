@@ -82,10 +82,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
             
-            ! New squared + sqrt quantity (i.e. |curl_v_grad_v_r|)
             If (compute_quantity(curl_v_grad_v_r_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif            
@@ -127,7 +126,7 @@ Contains
             Endif   
             If (compute_quantity(curl_v_grad_v_theta_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif
@@ -172,7 +171,7 @@ Contains
             Endif  
             If (compute_quantity(curl_v_grad_v_phi_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif
@@ -198,10 +197,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
 
-            ! New squared + sqrt quantity (i.e. |curl_buoyancy_force_theta|)
             If (compute_quantity(curl_buoyancy_force_theta_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif
@@ -216,10 +214,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
 
-            ! New squared + sqrt quantity (i.e. |curl_buoyancy_force_phi|)
             If (compute_quantity(curl_buoyancy_force_phi_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif
@@ -287,10 +284,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
         
-            ! New squared + sqrt quantity (i.e. |curl_j_cross_b_r|)
             If (compute_quantity(curl_j_cross_b_r_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif            
@@ -343,10 +339,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
         
-            ! New squared + sqrt quantity (i.e. |curl_j_cross_b_theta|)
             If (compute_quantity(curl_j_cross_b_theta_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif            
@@ -396,10 +391,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
             
-            ! New squared + sqrt quantity (i.e. |curl_j_cross_b_phi|)
             If (compute_quantity(curl_j_cross_b_phi_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif            
@@ -426,10 +420,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
 
-            ! New squared + sqrt quantity (i.e. |curl_coriolis_force_r|)
             If (compute_quantity(curl_coriolis_force_r_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif
@@ -447,10 +440,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
             
-            ! New squared + sqrt quantity (i.e. |curl_coriolis_force_theta|)
             If (compute_quantity(curl_coriolis_force_theta_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif
@@ -467,10 +459,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
 
-            ! New squared + sqrt quantity (i.e. |curl_coriolis_force_phi|)
             If (compute_quantity(curl_coriolis_force_phi_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif
@@ -499,10 +490,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
 
-            ! New squared + sqrt quantity (i.e. |curl_viscous_force_r|)
             If (compute_quantity(curl_pressure_force_r_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif           
@@ -518,10 +508,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
 
-            ! New squared + sqrt quantity (i.e. |curl_pressure_force_theta|)
             If (compute_quantity(curl_pressure_force_theta_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif
@@ -539,10 +528,9 @@ Contains
                 Call Add_Quantity(qty)
             Endif
 
-            ! New squared + sqrt quantity (i.e. |curl_viscous_force_phi|)
             If (compute_quantity(curl_pressure_force_phi_squared)) Then
                 DO_PSI
-                    qty(PSI) = sqrt(qty(PSI)*qty(PSI))
+                    qty(PSI) = qty(PSI)*qty(PSI)
                 END_DO
                 Call Add_Quantity(qty)
             Endif
@@ -556,33 +544,57 @@ Contains
         Integer :: r, k, t
 
         !!!!!!!!!!!!!!!!!!!!!!!!!!! Viscous Force !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       
+        If (compute_quantity(curl_viscous_force_r) .or. compute_quantity(curl_viscous_force_r_squared)) Then
+            If (compute_quantity(curl_viscous_force_r)) Then
+                DO_PSI
+                    qty(PSI) = One_Over_R(r)*(VFDBUFF(PSI,dvf_p_dt) + &
+                                    cottheta(t)*vforce_buffer(PSI,vfp_r) - &
+                                    csctheta(t)*VFDBUFF(PSI,dvf_t_dp))
+                END_DO
+                Call Add_Quantity(qty)   
+            Endif
+            If (compute_quantity(curl_viscous_force_r_squared)) Then
+                DO_PSI
+                    qty(PSI) = qty(PSI)*qty(PSI)
+                END_DO
+                Call Add_Quantity(qty)   
+            Endif
+        Endif    
+            
+        If (compute_quantity(curl_viscous_force_theta) .or. compute_quantity(curl_viscous_force_theta_squared)) Then
+            If (compute_quantity(curl_viscous_force_theta)) Then
+                DO_PSI
+                    qty(PSI) = One_Over_R(r)*(csctheta(t)*VFDBUFF(PSI,dvf_r_dp) - &
+                                    vforce_buffer(PSI,vfp_p)) - &
+                               VFDBUFF(PSI,dvf_p_dr)
+                END_DO
+                Call Add_Quantity(qty)
+            Endif
+            If (compute_quantity(curl_viscous_force_theta_squared)) Then
+                DO_PSI
+                    qty(PSI) = qty(PSI)*qty(PSI)
+                END_DO
+                Call Add_Quantity(qty)   
+            Endif
+        Endif    
 
-        If (compute_quantity(curl_viscous_force_r)) Then
-            DO_PSI
-                qty(PSI) = One_Over_R(r)*(VFDBUFF(PSI,dvf_p_dt) + &
-                                cottheta(t)*vforce_buffer(PSI,vfp_r) - &
-                                csctheta(t)*VFDBUFF(PSI,dvf_t_dp))
-            END_DO
-            Call Add_Quantity(qty)   
-        Endif
-
-        If (compute_quantity(curl_viscous_force_theta)) Then
-            DO_PSI
-                qty(PSI) = One_Over_R(r)*(csctheta(t)*VFDBUFF(PSI,dvf_r_dp) - &
-                                vforce_buffer(PSI,vfp_p)) - &
-                           VFDBUFF(PSI,dvf_p_dr)
-            END_DO
-            Call Add_Quantity(qty)
-        Endif
-         
-        If (compute_quantity(curl_viscous_force_phi)) Then
-            DO_PSI
-                qty(PSI) = VFDBUFF(PSI,dvf_t_dr) + &
-                           One_Over_R(r)*(vforce_buffer(PSI,vfp_t) - &
-                             VFDBUFF(PSI,dvf_r_dt))
-            END_DO
-            Call Add_Quantity(qty)
-        Endif
+        If (compute_quantity(curl_viscous_force_phi) .or. compute_quantity(curl_viscous_force_phi_squared)) Then         
+            If (compute_quantity(curl_viscous_force_phi)) Then
+                DO_PSI
+                    qty(PSI) = VFDBUFF(PSI,dvf_t_dr) + &
+                               One_Over_R(r)*(vforce_buffer(PSI,vfp_t) - &
+                                 VFDBUFF(PSI,dvf_r_dt))
+                END_DO
+                Call Add_Quantity(qty)
+            Endif
+            If (compute_quantity(curl_viscous_force_phi_squared)) Then
+                DO_PSI
+                    qty(PSI) = qty(PSI)*qty(PSI)
+                END_DO
+                Call Add_Quantity(qty)   
+            Endif
+        Endif    
 
     End Subroutine Compute_Curl_Viscous_Force
 
